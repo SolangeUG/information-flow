@@ -26,13 +26,20 @@
     </properties>
 
     <dependencies>
+        <!-- Use beautiful FXExperience UI controls -->
+        <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>9.0.0</version>
+        </dependency>
+
+        <!-- To run tests on IDE such as Eclipse, Intellij -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter-engine</artifactId>
             <version>${junit.jupiter.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- To run tests on IDE such as Eclipse, Intellij -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-runner</artifactId>
