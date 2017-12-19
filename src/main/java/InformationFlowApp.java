@@ -29,6 +29,10 @@ public class InformationFlowApp extends Application {
         MainView mainView = new MainView(graph, graphPanel);
 
         Scene scene = new Scene(mainView);
+        String styleSheet = getClass()
+                .getResource("styles/application.css").getFile().substring(1);
+        scene.getStylesheets().add(styleSheet);
+
         primaryStage.setScene(scene);
         primaryStage.setMinHeight(980);
         primaryStage.setMinWidth(1480);
@@ -59,8 +63,8 @@ public class InformationFlowApp extends Application {
         ViewPanel graphPanel = viewer.addDefaultView(false);
         graphPanel.getCamera().setViewPercent(0.65);
 
-        String graphFile = getClass().getResource("data/facebook_1000.txt").getFile();
-        graphFile = graphFile.substring(1);
+        String graphFile = getClass()
+                .getResource("data/facebook_1000.txt").getFile().substring(1);
         GraphLoader.loadGraph(graph, graphFile);
 
         viewer.enableAutoLayout();
