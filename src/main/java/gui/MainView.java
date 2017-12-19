@@ -1,5 +1,7 @@
 package gui;
 
+import graph.Graph;
+import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -27,13 +29,15 @@ public class MainView extends StackPane {
 
     private Label randomNodeLabel;
     private ViewPanel graphPanel;
+    private Graph graph;
 
     /**
      * Create this view
      */
-    public MainView(ViewPanel graphPanel) {
+    public MainView(Graph graph, ViewPanel graphPanel) {
         super();
 
+        this.graph = graph;
         this.graphPanel = graphPanel;
         this.getStyleClass().add("default");
         this.getChildren().add(getRootLayout());
@@ -125,9 +129,7 @@ public class MainView extends StackPane {
 
         Button launch = new Button("Launch", new ImageView(launchImage));
         launch.onMouseClickedProperty().addListener(
-                event -> {
-                    // TODO raise event to inform of this action
-                }
+                event -> launchSimulations()
         );
         return launch;
     }
@@ -149,6 +151,25 @@ public class MainView extends StackPane {
 
         centerPane.requestLayout();
         return centerPane;
+    }
+
+    /**
+     * Launch graph simulations with newly chosen
+     * values for rewardA and reward B in a separate thread.
+     * This is necessary to avoid freezing the GUI.
+     */
+    private void launchSimulations() {
+
+        Task<String> simulationTask = new Task<String>() {
+            @Override
+            protected String call() {
+                graph.runSimulations(aRewardValue, bRewardValue);
+                String randomNode = graph.getSeededVertex();
+                randomNodeLabel.setText("Seeded node id is " + randomNode);
+                return "simulations";
+            }
+        };
+        new Thread(simulationTask).start();
     }
 
 }
