@@ -15,4 +15,4 @@ It investigates cascading behaviros (or information flow) within a social networ
 > by David Easley and Jon Kleinberg. Cambridge University Press, 2010.
 
 The first part of this project will look at what the *network equilibrium* looks like when given certain starting conditions, and after a number of simulations.
-The second part of the project investigates the maximal conditions under which a __complete cascade__ can be occur in a given social network.
+The second part of the project investigates the maximal conditions under which a __complete cascade__ can occur in a given social network.
