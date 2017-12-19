@@ -129,7 +129,11 @@ public class MainView extends StackPane {
 
         Button launch = new Button("Launch", new ImageView(launchImage));
         launch.onMouseClickedProperty().addListener(
-                event -> launchSimulations()
+                event -> {
+                    String randomNode = graph.getSeededVertex();
+                    randomNodeLabel.setText("Seeded node id is " + randomNode);
+                    launchSimulations();
+                }
         );
         return launch;
     }
@@ -164,8 +168,6 @@ public class MainView extends StackPane {
             @Override
             protected String call() {
                 graph.runSimulations(aRewardValue, bRewardValue);
-                String randomNode = graph.getSeededVertex();
-                randomNodeLabel.setText("Seeded node id is " + randomNode);
                 return "simulations";
             }
         };
