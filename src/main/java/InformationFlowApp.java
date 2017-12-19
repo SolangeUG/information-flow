@@ -46,7 +46,8 @@ public class InformationFlowApp extends Application {
     private ViewPanel initGraph() {
         graph = new Graph("Information Cascades");
 
-        String styleSheet = "url(file:///styles/application.css)";
+        String styleSheet = getClass().getResource("styles/graph.css").getFile();
+        styleSheet = "url('file://" + styleSheet + "')";
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
@@ -58,7 +59,8 @@ public class InformationFlowApp extends Application {
         ViewPanel graphPanel = viewer.addDefaultView(false);
         graphPanel.getCamera().setViewPercent(0.65);
 
-        String graphFile = getClass().getResource("data/facebook_1000.txt").toString();
+        String graphFile = getClass().getResource("data/facebook_1000.txt").getFile();
+        graphFile = graphFile.substring(1);
         GraphLoader.loadGraph(graph, graphFile);
 
         viewer.enableAutoLayout();
