@@ -124,8 +124,9 @@ public class MainView extends StackPane {
      * @return a button
      */
     private Button getLaunchButton() {
-        Image launchImage = new Image(
-                getClass().getResourceAsStream("images/launch.png"));
+        String imageFile = getClass().getResource("images/launch.png").getFile();
+        imageFile = imageFile.substring(1);
+        Image launchImage = new Image(imageFile);
 
         Button launch = new Button("Launch", new ImageView(launchImage));
         launch.onMouseClickedProperty().addListener(
