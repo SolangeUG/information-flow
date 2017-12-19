@@ -1,0 +1,20 @@
+/* Graph Stylesheet */
+
+node {
+    fill-color: blue;
+    text-color: blue;
+    text-mode: hidden;
+}
+
+node.default {
+    fill-color: blue;
+}
+
+node.switched {
+    fill-color: #E91E63;
+}
+
+edge {
+    fill-color: #EAECEE;
+    fill-mode: plain;
+}

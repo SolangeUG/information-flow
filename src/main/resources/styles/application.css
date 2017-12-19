@@ -1,0 +1,10 @@
+/* JavaFX Application Stylesheet */
+
+.root {
+    -fx-background-color: #85C1E9;
+
+}
+
+.label {
+    -fx-color: #2471A3;
+}
