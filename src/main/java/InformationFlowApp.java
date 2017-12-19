@@ -1,5 +1,11 @@
+import graph.Graph;
+import gui.MainView;
 import javafx.application.Application;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.graphstream.ui.swingViewer.ViewPanel;
+import org.graphstream.ui.view.Viewer;
+import util.GraphLoader;
 
 /**
  * Main application entry
@@ -7,6 +13,8 @@ import javafx.stage.Stage;
  *
  */
 public class InformationFlowApp extends Application {
+
+    private Graph graph;
 
     public static void main(String[] args) {
         System.setProperty("org.graphstream.ui.renderer",
@@ -17,6 +25,43 @@ public class InformationFlowApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
+        ViewPanel graphPanel = initGraph();
+        MainView mainView = new MainView(graph, graphPanel);
 
+        Scene scene = new Scene(mainView);
+        primaryStage.setScene(scene);
+        primaryStage.setMinHeight(980);
+        primaryStage.setMinWidth(1480);
+        primaryStage.show();
+
+        primaryStage.setOnCloseRequest(
+                event -> System.exit(0)
+        );
+    }
+
+    /**
+     * Initialize a graph from a file
+     * @return a panel for graph visualizations
+     */
+    private ViewPanel initGraph() {
+        graph = new Graph("Information Cascades");
+
+        String styleSheet = "url(file:///styles/application.css)";
+        graph.addAttribute("ui.stylesheet", styleSheet);
+        graph.addAttribute("ui.quality");
+        graph.addAttribute("ui.antialias");
+
+        graph.setAutoCreate(true);
+        graph.setStrict(false);
+
+        Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
+        ViewPanel graphPanel = viewer.addDefaultView(false);
+        graphPanel.getCamera().setViewPercent(0.65);
+
+        String graphFile = getClass().getResource("data/facebook_1000.txt").toString();
+        GraphLoader.loadGraph(graph, graphFile);
+
+        viewer.enableAutoLayout();
+        return graphPanel;
     }
 }
