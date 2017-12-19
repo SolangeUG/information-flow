@@ -62,12 +62,12 @@ public class InformationFlowApp extends Application {
         Viewer viewer = new Viewer(graph, Viewer.ThreadingModel.GRAPH_IN_ANOTHER_THREAD);
         ViewPanel graphPanel = viewer.addDefaultView(false);
         graphPanel.getCamera().setViewPercent(0.65);
+        viewer.enableAutoLayout();
 
         String graphFile = getClass()
                 .getResource("data/facebook_1000.txt").getFile().substring(1);
         GraphLoader.loadGraph(graph, graphFile);
 
-        viewer.enableAutoLayout();
         return graphPanel;
     }
 }
