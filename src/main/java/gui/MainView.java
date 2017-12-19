@@ -1,11 +1,19 @@
 package gui;
 
+import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import org.graphstream.ui.swingViewer.ViewPanel;
+
+import javax.swing.*;
 
 /**
  * This class represents the main GUI
@@ -16,25 +24,19 @@ public class MainView extends StackPane {
 
     private int aRewardValue = 1;
     private int bRewardValue = 2;
-    private int seededNodeId = 0;
-    private StackPane centerPane;
+
+    private Label randomNodeLabel;
+    private ViewPanel graphPanel;
 
     /**
      * Create this view
      */
-    public MainView() {
+    public MainView(ViewPanel graphPanel) {
         super();
 
+        this.graphPanel = graphPanel;
+        this.getStyleClass().add("default");
         this.getChildren().add(getRootLayout());
-    }
-
-    /**
-     * Return the main pane of this view
-     * It'll be used to hold the graph visualizations
-     * @return centerPane
-     */
-    public StackPane getCenterPane() {
-        return this.centerPane;
     }
 
     /**
@@ -43,13 +45,12 @@ public class MainView extends StackPane {
      */
     private HBox getRootLayout() {
         HBox root = new HBox();
-        root.getStyleClass().add(".root");
+        root.getStyleClass().add(".default");
         root.setPadding(new Insets(15));
         root.setSpacing(10);
 
-        //TODO : add left and center panes
         GridPane leftPane = getLeftPane();
-        initCenterPane();
+        StackPane centerPane = getCenterPane();
         root.getChildren().addAll(leftPane, centerPane);
 
         root.requestLayout();
@@ -62,26 +63,92 @@ public class MainView extends StackPane {
      */
     private GridPane getLeftPane() {
         GridPane leftPane = new GridPane();
+        leftPane.getStyleClass().add(".default");
 
-        //TODO : add aReward, bReward, seededNode and legend components
+        leftPane.setPadding(new Insets(25));
+        leftPane.setAlignment(Pos.CENTER);
+        leftPane.setHgap(10);
+        leftPane.setVgap(10);
+
         Label aLabel = new Label("Reward A");
-        TextField aTextField = new TextField();
+        leftPane.add(aLabel, 0, 0);
+
+        TextField aTextField = getTextField("a");
+        leftPane.add(aTextField, 1, 0);
+
+        Label bLabel = new Label("Reward B");
+        leftPane.add(bLabel, 0, 1);
+
+        TextField bTextField = getTextField("b");
+        leftPane.add(bTextField, 1, 1);
+
+        randomNodeLabel = new Label("[Seeded node id]");
+        leftPane.add(randomNodeLabel, 1, 2);
+
+        Button launch = getLaunchButton();
+        leftPane.add(launch, 0, 3);
 
         leftPane.requestLayout();
         return leftPane;
     }
 
     /**
-     * Init the center panel for this view
-     * This is the panel that will hold the graph visualizations
+     * Create and initialize a textfield
+     * @param id an id for the textfield
+     * @return a textfield
      */
-    private void initCenterPane() {
-        this.centerPane = new StackPane();
-        centerPane.requestLayout();
+    private TextField getTextField(String id) {
+        TextField textField = new TextField();
+        textField.textProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (! newValue.matches("\\d*")) {
+                        textField.setText(newValue.replaceAll("[^\\d]", ""));
+                    } else {
+                        if ("a".equals(id)) {
+                            aRewardValue = Integer.valueOf(newValue);
+                        } else {
+                            bRewardValue = Integer.valueOf(newValue);
+                        }
+                    }
+                }
+        );
+        return textField;
     }
 
+    /**
+     * Create and initialize a launch button
+     * @return a button
+     */
+    private Button getLaunchButton() {
+        Image launchImage = new Image(
+                getClass().getResourceAsStream("images/launch.png"));
 
+        Button launch = new Button("Launch", new ImageView(launchImage));
+        launch.onMouseClickedProperty().addListener(
+                event -> {
+                    // TODO raise event to inform of this action
+                }
+        );
+        return launch;
+    }
 
+    /**
+     * Return the center panel for this view.
+     * This is the panel that holds the graph visualizations.
+     * @return the center pane
+     */
+    private StackPane getCenterPane() {
+        StackPane centerPane = new StackPane();
+        centerPane.setMinSize(1280, 600);
 
+        SwingNode node = new SwingNode();
+        SwingUtilities.invokeLater(
+                () -> node.setContent(graphPanel)
+        );
+        centerPane.getChildren().add(node);
+
+        centerPane.requestLayout();
+        return centerPane;
+    }
 
 }
