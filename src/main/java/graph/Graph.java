@@ -28,6 +28,8 @@ public class Graph  extends SingleGraph {
      * @param num the vertex id
      */
     public void addVertex(int num) {
+        super.addNode(String.valueOf(num));
+
         if (! vertices.containsKey(num)) {
             Vertex vertex = new Vertex(this, String.valueOf(num));
             vertices.put(num, vertex);
@@ -40,6 +42,9 @@ public class Graph  extends SingleGraph {
      * @param to the destination verted id
      */
     public void addEdge(int from, int to) {
+        String edgeId = String.valueOf(from) + "-" + String.valueOf(to);
+        super.addEdge(edgeId, String.valueOf(from), String.valueOf(to));
+
         Vertex start = vertices.get(from);
         if (start != null) {
             Edge edge = new Edge(from, to);
