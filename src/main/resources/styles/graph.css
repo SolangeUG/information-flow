@@ -6,12 +6,16 @@ node {
     text-mode: hidden;
 }
 
-node.default {
-    fill-color: blue;
-}
-
 node.switched {
     fill-color: #E91E63;
+}
+
+node.seeded {
+    fill-color: #28B463;
+}
+
+node.default {
+    fill-color: blue;
 }
 
 edge {

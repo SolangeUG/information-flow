@@ -2,7 +2,7 @@ package graph;
 
 import org.graphstream.graph.implementations.SingleGraph;
 
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * Graph implementation
@@ -12,7 +12,6 @@ import java.util.HashMap;
 public class Graph  extends SingleGraph {
 
     private HashMap<Integer, Vertex> vertices;
-    private Vertex seededVertex;
 
     /**
      * Create new empty graph
@@ -53,16 +52,6 @@ public class Graph  extends SingleGraph {
     }
 
     /**
-     * Return a randomly chosen seeded vertex id
-     * for simulations purposes
-     * @return a randomly choosen vertex id
-     */
-    public String getSeededVertex() {
-        seededVertex = getRandomVertex();
-        return seededVertex.getId();
-    }
-
-    /**
      * Behavior cascade simulation algorithm
      * @param rewardA value of incentive a
      * @param rewardB value of incentive b
@@ -82,25 +71,125 @@ public class Graph  extends SingleGraph {
          *  → v should switch to Netbeans if p > [b / (a + b)]
          * */
 
+        System.out.println("\n***************************");
+        System.out.println("    START OF SIMULATION    ");
+
+        resetState();
+        sleep(5000);
+
+        // Value that determines whether a vertex should switch
         double threshold = ((double) rewardB) / ((double) (rewardA + rewardB));
 
-        // TODO : implement simulation algorithm
+        // A list of vertices that have switched
+        Queue<Vertex> switched = new LinkedList<>();
 
+        // A list of vertices that will switch at each iteration
+        List<Vertex> toSwitch = new LinkedList<>();
 
+        // A list of all visited vertices
+        HashSet<Vertex> visited = new HashSet<>();
+
+        // Start with randomly choosen nodes
+        switched.addAll(getRandomSeededVertices());
+        sleep(5000);
+
+        while (! switched.isEmpty()) {
+
+            Vertex current = switched.poll();
+
+            // determine which neighbors should switch
+            for (Integer id : current.getNeighbors()) {
+                Vertex node = vertices.get(id);
+
+                if (! visited.contains(node) || ! node.hasSwitched()) {
+                    double prob = computeSwitchingProbability(node);
+
+                    if (prob > threshold) {
+                        toSwitch.add(node);
+                    }
+                }
+
+                // keep track of all the neighbors that were visited
+                visited.add(node);
+            }
+
+            // make all the changes (vertices that have switched)
+            for (Vertex vertex: toSwitch) {
+                vertex.setSwitched(true);
+                sleep(1000);
+                switched.add(vertex);
+            }
+
+            // clear this list before running next iteration
+            toSwitch.clear();
+        }
+
+        System.out.println("\n     END OF SIMULATION     ");
+        System.out.println("\n***************************\n");
     }
 
     /**
-     * Return a randomly chosen seeded vertex
+     * Return a randomly chosen seeded vertices list
      * for simulations purposes
-     * @return a randomly chosen vertex
+     * @return a list of randomly chosen nodes
      */
-    private Vertex getRandomVertex() {
-        int randomIndex = (int)(Math.random() * vertices.size());
-        Vertex random = null;
-        while (random == null) {
-            random = vertices.get(randomIndex);
+    private List<Vertex> getRandomSeededVertices() {
+        List<Vertex> nodes = new LinkedList<>();
+        int limit = (vertices.size() + 1) / 10;
+
+        for (int i = 0; i < limit; i++) {
+            Vertex vertex = vertices.get(i);
+            if (vertex != null) {
+                vertex.setSwitched(true);
+                vertex.setAttribute("ui.class", "seeded");
+                nodes.add(vertex);
+            }
         }
-        return random;
+
+        return nodes;
+    }
+
+    /**
+     * Compute the switching probability of a given node
+     * @param vertex the node at hand
+     * @return the switching probability
+     */
+    private double computeSwitchingProbability(Vertex vertex) {
+        int switchedNeighbors = 0;
+        double totalNeighbors = (double) vertex.getNeighbors().size();
+
+        for (Integer id: vertex.getNeighbors()) {
+            Vertex neighbor = vertices.get(id);
+            if (neighbor.hasSwitched()) {
+                switchedNeighbors++;
+            }
+        }
+
+        double prob;
+        prob = ((double) switchedNeighbors) / totalNeighbors;
+        return prob;
+    }
+
+    /**
+     * Reset vertices states
+     */
+    private void resetState() {
+        for (Vertex node: vertices.values()) {
+            node.setSwitched(false);
+        }
+    }
+
+    /**
+     * In order to gradually visualize the
+     * cascades in the graph, let's introduce a
+     * 100 milliseconds pause.
+     */
+    private void sleep(int time) {
+        try {
+            Thread.sleep(time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }
