@@ -2,6 +2,7 @@ import graph.Graph;
 import gui.MainView;
 import javafx.application.Application;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
@@ -29,13 +30,18 @@ public class InformationFlowApp extends Application {
         MainView mainView = new MainView(graph, graphPanel);
 
         Scene scene = new Scene(mainView);
-        String styleSheet = getClass()
-                .getResource("styles/application.css").getFile().substring(1);
+        String styleSheet = InformationFlowApp.class
+                .getResource("styles/application.css").toExternalForm();
         scene.getStylesheets().add(styleSheet);
 
+        String iconFile = InformationFlowApp.class
+                .getResource("images/social_network.png").toExternalForm();
+        primaryStage.getIcons().add(new Image(iconFile));
+        primaryStage.setTitle("Information Cascades");
+
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(980);
-        primaryStage.setMinWidth(1480);
+        primaryStage.setMinHeight(880);
+        primaryStage.setMinWidth(980);
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(
@@ -50,7 +56,7 @@ public class InformationFlowApp extends Application {
     private ViewPanel initGraph() {
         graph = new Graph("Information Cascades");
 
-        String styleSheet = getClass().getResource("styles/graph.css").getFile();
+        String styleSheet = InformationFlowApp.class.getResource("styles/graph.css").getFile();
         styleSheet = "url('file://" + styleSheet + "')";
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.addAttribute("ui.quality");
@@ -64,7 +70,7 @@ public class InformationFlowApp extends Application {
         graphPanel.getCamera().setViewPercent(0.65);
         viewer.enableAutoLayout();
 
-        String graphFile = getClass()
+        String graphFile = InformationFlowApp.class
                 .getResource("data/facebook_1000.txt").getFile().substring(1);
         GraphLoader.loadGraph(graph, graphFile);
 

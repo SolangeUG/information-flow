@@ -5,6 +5,7 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -13,9 +14,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
+import org.controlsfx.tools.Borders;
 import org.graphstream.ui.swingViewer.ViewPanel;
 
 import javax.swing.*;
+import java.util.Objects;
 
 /**
  * This class represents the main GUI
@@ -54,8 +58,11 @@ public class MainView extends StackPane {
         root.setSpacing(10);
 
         GridPane leftPane = getLeftPane();
+        Node wrappedGrid = Borders.wrap(leftPane)
+                .lineBorder().color(Color.WHITE).buildAll();
+
         StackPane centerPane = getCenterPane();
-        root.getChildren().addAll(leftPane, centerPane);
+        root.getChildren().addAll(wrappedGrid, centerPane);
 
         root.requestLayout();
         return root;
@@ -71,26 +78,34 @@ public class MainView extends StackPane {
 
         leftPane.setPadding(new Insets(25));
         leftPane.setAlignment(Pos.CENTER);
-        leftPane.setHgap(10);
-        leftPane.setVgap(10);
+        leftPane.setHgap(15);
+        leftPane.setVgap(20);
 
         Label aLabel = new Label("Reward A");
+        aLabel.getStyleClass().add(".label");
         leftPane.add(aLabel, 0, 0);
 
         TextField aTextField = getTextField("a");
         leftPane.add(aTextField, 1, 0);
 
         Label bLabel = new Label("Reward B");
+        bLabel.getStyleClass().add(".label");
         leftPane.add(bLabel, 0, 1);
 
         TextField bTextField = getTextField("b");
         leftPane.add(bTextField, 1, 1);
 
         randomNodeLabel = new Label("[Seeded node id]");
+        randomNodeLabel.getStyleClass().add(".label");
         leftPane.add(randomNodeLabel, 1, 2);
 
         Button launch = getLaunchButton();
-        leftPane.add(launch, 0, 3);
+        HBox container = new HBox(10);
+        container.setAlignment(Pos.BOTTOM_RIGHT);
+        container.getChildren().add(launch);
+        leftPane.add(container, 1, 4);
+
+
 
         leftPane.requestLayout();
         return leftPane;
@@ -124,11 +139,18 @@ public class MainView extends StackPane {
      * @return a button
      */
     private Button getLaunchButton() {
-        String imageFile = getClass()
-                .getResource("images/launch.png").getFile().substring(1);
-        Image launchImage = new Image(imageFile);
 
-        Button launch = new Button("Launch", new ImageView(launchImage));
+        String imageFile = Objects.requireNonNull(getClass().getClassLoader()
+                .getResource("images/launch.png")).getPath();
+        Button launch;
+        if (imageFile != null) {
+            imageFile = "file://" + imageFile;
+            Image launchImage = new Image(imageFile);
+            launch = new Button("Launch", new ImageView(launchImage));
+        } else {
+            launch = new Button("Launch");
+        }
+
         launch.onMouseClickedProperty().addListener(
                 event -> {
                     String randomNode = graph.getSeededVertex();
@@ -146,7 +168,7 @@ public class MainView extends StackPane {
      */
     private StackPane getCenterPane() {
         StackPane centerPane = new StackPane();
-        centerPane.setMinSize(1280, 600);
+        centerPane.setMinSize(980, 600);
 
         SwingNode node = new SwingNode();
         SwingUtilities.invokeLater(
