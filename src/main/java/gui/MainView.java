@@ -31,7 +31,6 @@ public class MainView extends StackPane {
     private int aRewardValue = 1;
     private int bRewardValue = 2;
 
-    private Label randomNodeLabel;
     private ViewPanel graphPanel;
     private Graph graph;
 
@@ -45,6 +44,7 @@ public class MainView extends StackPane {
         this.graphPanel = graphPanel;
         this.getStyleClass().add("default");
         this.getChildren().add(getRootLayout());
+        this.requestLayout();
     }
 
     /**
@@ -95,17 +95,11 @@ public class MainView extends StackPane {
         TextField bTextField = getTextField("b");
         leftPane.add(bTextField, 1, 1);
 
-        randomNodeLabel = new Label("[Seeded node id]");
-        randomNodeLabel.getStyleClass().add(".label");
-        leftPane.add(randomNodeLabel, 1, 2);
-
         Button launch = getLaunchButton();
         HBox container = new HBox(10);
         container.setAlignment(Pos.BOTTOM_RIGHT);
         container.getChildren().add(launch);
         leftPane.add(container, 1, 4);
-
-
 
         leftPane.requestLayout();
         return leftPane;
@@ -121,7 +115,7 @@ public class MainView extends StackPane {
         textField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (! newValue.matches("\\d*")) {
-                        textField.setText(newValue.replaceAll("[^\\d]", ""));
+                        textField.setText(newValue.replaceAll("[^\\d]", "0"));
                     } else {
                         if ("a".equals(id)) {
                             aRewardValue = Integer.valueOf(newValue);
@@ -151,12 +145,8 @@ public class MainView extends StackPane {
             launch = new Button("Launch");
         }
 
-        launch.onMouseClickedProperty().addListener(
-                event -> {
-                    String randomNode = graph.getSeededVertex();
-                    randomNodeLabel.setText("Seeded node id is " + randomNode);
-                    launchSimulations();
-                }
+        launch.setOnAction(
+                event -> launchSimulations()
         );
         return launch;
     }
@@ -177,6 +167,7 @@ public class MainView extends StackPane {
         centerPane.getChildren().add(node);
 
         centerPane.requestLayout();
+        centerPane.requestFocus();
         return centerPane;
     }
 
