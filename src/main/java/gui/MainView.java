@@ -5,17 +5,15 @@ import javafx.concurrent.Task;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
-import org.controlsfx.tools.Borders;
 import org.graphstream.ui.swingViewer.ViewPanel;
 
 import javax.swing.*;
@@ -29,7 +27,7 @@ import java.util.Objects;
 public class MainView extends StackPane {
 
     private int aRewardValue = 1;
-    private int bRewardValue = 2;
+    private int bRewardValue = 1;
 
     private ViewPanel graphPanel;
     private Graph graph;
@@ -51,58 +49,50 @@ public class MainView extends StackPane {
      * Return the root layout for this view
      * @return root layout
      */
-    private HBox getRootLayout() {
-        HBox root = new HBox();
-        root.getStyleClass().add(".default");
-        root.setPadding(new Insets(15));
-        root.setSpacing(10);
+    private BorderPane getRootLayout() {
+        BorderPane root = new BorderPane();
 
-        GridPane leftPane = getLeftPane();
-        Node wrappedGrid = Borders.wrap(leftPane)
-                .lineBorder().color(Color.WHITE).buildAll();
-
-        StackPane centerPane = getCenterPane();
-        root.getChildren().addAll(wrappedGrid, centerPane);
+        root.setTop(getTopPane());
+        root.setCenter(getCenterPane());
 
         root.requestLayout();
         return root;
     }
 
     /**
-     * Return the left panel for this view
-     * @return left panel
+     * Return the top panel for this view
+     * @return top panel
      */
-    private GridPane getLeftPane() {
-        GridPane leftPane = new GridPane();
-        leftPane.getStyleClass().add(".default");
-
-        leftPane.setPadding(new Insets(25));
-        leftPane.setAlignment(Pos.CENTER);
-        leftPane.setHgap(15);
-        leftPane.setVgap(20);
+    private HBox getTopPane() {
+        HBox topPane = new HBox(40);
+        topPane.setStyle("-fx-background-color : #2980B9;");
+        topPane.setPadding(new Insets(15, 0, 18, 15));
 
         Label aLabel = new Label("Reward A");
         aLabel.getStyleClass().add(".label");
-        leftPane.add(aLabel, 0, 0);
-
         TextField aTextField = getTextField("a");
-        leftPane.add(aTextField, 1, 0);
+        HBox aBox = new HBox(10);
+        aBox.setAlignment(Pos.BASELINE_CENTER);
+        aBox.getChildren().addAll(aLabel, aTextField);
 
         Label bLabel = new Label("Reward B");
         bLabel.getStyleClass().add(".label");
-        leftPane.add(bLabel, 0, 1);
-
         TextField bTextField = getTextField("b");
-        leftPane.add(bTextField, 1, 1);
+        HBox bBox = new HBox(10);
+        bBox.setAlignment(Pos.BASELINE_CENTER);
+        bBox.getChildren().addAll(bLabel, bTextField);
 
         Button launch = getLaunchButton();
-        HBox container = new HBox(10);
-        container.setAlignment(Pos.BOTTOM_RIGHT);
-        container.getChildren().add(launch);
-        leftPane.add(container, 1, 4);
+        HBox lBox = new HBox(10);
+        lBox.setPadding(new Insets(0, 15, 0, 0));
+        lBox.setAlignment(Pos.CENTER_RIGHT);
+        lBox.getChildren().add(launch);
 
-        leftPane.requestLayout();
-        return leftPane;
+        topPane.getChildren().addAll(aBox, bBox, lBox);
+        HBox.setHgrow(lBox, Priority.ALWAYS);
+
+        topPane.requestLayout();
+        return topPane;
     }
 
     /**
@@ -112,10 +102,19 @@ public class MainView extends StackPane {
      */
     private TextField getTextField(String id) {
         TextField textField = new TextField();
+        textField.setPrefWidth(120.0);
+        textField.setAlignment(Pos.CENTER_RIGHT);
+
+        if ("a".equals(id)) {
+            textField.setText(String.valueOf(aRewardValue));
+        } else {
+            textField.setText(String.valueOf(bRewardValue));
+        }
+
         textField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (! newValue.matches("\\d*")) {
-                        textField.setText(newValue.replaceAll("[^\\d]", "0"));
+                        textField.setText(oldValue);
                     } else {
                         if ("a".equals(id)) {
                             aRewardValue = Integer.valueOf(newValue);
@@ -158,7 +157,7 @@ public class MainView extends StackPane {
      */
     private StackPane getCenterPane() {
         StackPane centerPane = new StackPane();
-        centerPane.setMinSize(980, 600);
+        centerPane.setMinSize(1080, 600);
 
         SwingNode node = new SwingNode();
         SwingUtilities.invokeLater(

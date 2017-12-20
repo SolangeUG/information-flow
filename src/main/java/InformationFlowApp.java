@@ -40,8 +40,8 @@ public class InformationFlowApp extends Application {
         primaryStage.setTitle("Information Cascades");
 
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(880);
-        primaryStage.setMinWidth(980);
+        primaryStage.setMinHeight(980);
+        primaryStage.setMinWidth(1080);
         primaryStage.show();
 
         primaryStage.setOnCloseRequest(
