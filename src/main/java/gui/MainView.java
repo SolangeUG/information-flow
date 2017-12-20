@@ -2,11 +2,13 @@ package gui;
 
 import graph.Graph;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingNode;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -28,6 +30,11 @@ public class MainView extends StackPane {
 
     private int aRewardValue = 1;
     private int bRewardValue = 1;
+
+    private ProgressBar progressBar;
+    private TextField aTextField;
+    private TextField bTextField;
+    private Button launchButton;
 
     private ViewPanel graphPanel;
     private Graph graph;
@@ -70,23 +77,27 @@ public class MainView extends StackPane {
 
         Label aLabel = new Label("Reward A");
         aLabel.getStyleClass().add(".label");
-        TextField aTextField = getTextField("a");
+        aTextField = getTextField("a");
         HBox aBox = new HBox(10);
         aBox.setAlignment(Pos.BASELINE_CENTER);
         aBox.getChildren().addAll(aLabel, aTextField);
 
         Label bLabel = new Label("Reward B");
         bLabel.getStyleClass().add(".label");
-        TextField bTextField = getTextField("b");
+        bTextField = getTextField("b");
         HBox bBox = new HBox(10);
         bBox.setAlignment(Pos.BASELINE_CENTER);
         bBox.getChildren().addAll(bLabel, bTextField);
 
-        Button launch = getLaunchButton();
-        HBox lBox = new HBox(10);
+        progressBar = new ProgressBar(0);
+        progressBar.setPrefWidth(400);
+        progressBar.setVisible(false);
+
+        launchButton = getLaunchButton();
+        HBox lBox = new HBox(40);
         lBox.setPadding(new Insets(0, 15, 0, 0));
         lBox.setAlignment(Pos.CENTER_RIGHT);
-        lBox.getChildren().add(launch);
+        lBox.getChildren().addAll(progressBar, launchButton);
 
         topPane.getChildren().addAll(aBox, bBox, lBox);
         HBox.setHgrow(lBox, Priority.ALWAYS);
@@ -145,7 +156,28 @@ public class MainView extends StackPane {
         }
 
         launch.setOnAction(
-                event -> launchSimulations()
+                event -> {
+                    aTextField.setDisable(true);
+                    bTextField.setDisable(true);
+                    launchButton.setDisable(true);
+
+                    progressBar.setVisible(true);
+                    progressBar.progressProperty().unbind();
+
+                    Task<String> task = launchSimulations();
+                    progressBar.progressProperty().bind(task.progressProperty());
+
+                    task.addEventHandler(
+                            WorkerStateEvent.WORKER_STATE_SUCCEEDED,
+                            event1 -> {
+                                aTextField.setDisable(false);
+                                bTextField.setDisable(false);
+                                launchButton.setDisable(false);
+
+                                progressBar.setVisible(false);
+                                progressBar.progressProperty().unbind();
+                            });
+                }
         );
         return launch;
     }
@@ -175,7 +207,7 @@ public class MainView extends StackPane {
      * values for rewardA and reward B in a separate thread.
      * This is necessary to avoid freezing the GUI.
      */
-    private void launchSimulations() {
+    private Task<String> launchSimulations() {
 
         Task<String> simulationTask = new Task<String>() {
             @Override
@@ -185,6 +217,8 @@ public class MainView extends StackPane {
             }
         };
         new Thread(simulationTask).start();
+
+        return simulationTask;
     }
 
 }

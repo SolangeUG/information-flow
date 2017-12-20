@@ -125,7 +125,7 @@ public class Graph  extends SingleGraph {
         }
 
         System.out.println("\n     END OF SIMULATION     ");
-        System.out.println("\n***************************\n");
+        System.out.println("***************************\n");
     }
 
     /**
