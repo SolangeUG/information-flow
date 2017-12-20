@@ -12,10 +12,9 @@ import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import org.graphstream.ui.swingViewer.ViewPanel;
 
 import javax.swing.*;
@@ -35,6 +34,11 @@ public class MainView extends StackPane {
     private TextField aTextField;
     private TextField bTextField;
     private Button launchButton;
+
+    private GridPane legend;
+    private Label totalLabel;
+    private Label seededLabel;
+    private Label switchedLabel;
 
     private ViewPanel graphPanel;
     private Graph graph;
@@ -160,6 +164,7 @@ public class MainView extends StackPane {
                     aTextField.setDisable(true);
                     bTextField.setDisable(true);
                     launchButton.setDisable(true);
+                    legend.setVisible(false);
 
                     progressBar.setVisible(true);
                     progressBar.progressProperty().unbind();
@@ -173,6 +178,14 @@ public class MainView extends StackPane {
                                 aTextField.setDisable(false);
                                 bTextField.setDisable(false);
                                 launchButton.setDisable(false);
+
+                                totalLabel.setText("initial vertices: "
+                                        + String.valueOf(graph.getTotalNodeCount()));
+                                seededLabel.setText("seeded vertices: "
+                                        + String.valueOf(graph.getSeededNodeCount()));
+                                switchedLabel.setText("switched vertices: "
+                                        + String.valueOf(graph.getSwitchedNodeCount()));
+                                legend.setVisible(true);
 
                                 progressBar.setVisible(false);
                                 progressBar.progressProperty().unbind();
@@ -197,6 +210,11 @@ public class MainView extends StackPane {
         );
         centerPane.getChildren().add(node);
 
+        legend = getLegendPane();
+        legend.setVisible(false);
+        centerPane.getChildren().add(legend);
+        StackPane.setAlignment(legend, Pos.BOTTOM_LEFT);
+
         centerPane.requestLayout();
         centerPane.requestFocus();
         return centerPane;
@@ -219,6 +237,46 @@ public class MainView extends StackPane {
         new Thread(simulationTask).start();
 
         return simulationTask;
+    }
+
+    /**
+     * Create a panel for displaying the graph legend
+     * @return a gridpane to hold the legend
+     */
+    private GridPane getLegendPane() {
+        GridPane legend = new GridPane();
+        legend.setPadding(new Insets(10, 10, 10, 0));
+        legend.setStyle("-fx-background-color: #F2F4F4;");
+        legend.setMaxSize(210, 40);
+        legend.setAlignment(Pos.CENTER);
+        legend.setVgap(5);
+        legend.setHgap(5);
+
+        Circle blueCircle = new Circle(5);
+        blueCircle.setFill(Color.BLUE);
+        legend.add(blueCircle, 0, 0);
+
+        totalLabel = new Label("initial vertices: ");
+        totalLabel.setStyle("-fx-text-fill: blue;");
+        legend.add(totalLabel, 1, 0);
+
+        Circle greenCircle = new Circle(5);
+        greenCircle.setFill(Color.rgb(40, 180, 99));
+        legend.add(greenCircle, 0, 1);
+
+        seededLabel = new Label("seeded vertices: ");
+        seededLabel.setStyle("-fx-text-fill: #28B463;");
+        legend.add(seededLabel, 1, 1);
+
+        Circle redCircle = new Circle(5);
+        redCircle.setFill(Color.rgb(233, 30, 99));
+        legend.add(redCircle, 0, 2);
+
+        switchedLabel = new Label("switched vertices: ");
+        switchedLabel.setStyle("-fx-text-fill: #E91E63;");
+        legend.add(switchedLabel, 1, 2);
+
+        return legend;
     }
 
 }

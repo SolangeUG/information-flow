@@ -12,6 +12,8 @@ import java.util.*;
 public class Graph  extends SingleGraph {
 
     private HashMap<Integer, Vertex> vertices;
+    private int seededNodeCount = 0;
+    private int switchedNodeCount = 0;
 
     /**
      * Create new empty graph
@@ -49,6 +51,32 @@ public class Graph  extends SingleGraph {
             Edge edge = new Edge(from, to);
             start.addEdge(edge);
         }
+    }
+
+    /**
+     * Return the number of nodes in the graph
+     * @return total number of nodes
+     */
+    public int getTotalNodeCount() {
+        return vertices.size();
+    }
+
+    /**
+     * Return the number of seeded vertices
+     * at each simulation
+     * @return seeded nodes count
+     */
+    public int getSeededNodeCount() {
+        return seededNodeCount;
+    }
+
+    /**
+     * Return the number of switched vertices
+     * after each simulation
+     * @return switched nodes count
+     */
+    public int getSwitchedNodeCount() {
+        return switchedNodeCount;
     }
 
     /**
@@ -118,6 +146,7 @@ public class Graph  extends SingleGraph {
                 vertex.setSwitched(true);
                 sleep(1000);
                 switched.add(vertex);
+                switchedNodeCount++;
             }
 
             // clear this list before running next iteration
@@ -143,6 +172,7 @@ public class Graph  extends SingleGraph {
                 vertex.setSwitched(true);
                 vertex.setAttribute("ui.class", "seeded");
                 nodes.add(vertex);
+                seededNodeCount++;
             }
         }
 
