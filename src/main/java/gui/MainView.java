@@ -1,7 +1,6 @@
 package gui;
 
 import algorithm.InformationCascade;
-import graph.Graph;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.embed.swing.SwingNode;
