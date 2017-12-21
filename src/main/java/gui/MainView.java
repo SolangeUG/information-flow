@@ -180,13 +180,6 @@ public class MainView extends StackPane {
                                 bTextField.setDisable(false);
                                 launchButton.setDisable(false);
 
-//                                totalLabel.setText("initial vertices: "
-//                                        + String.valueOf(graph.getVerticesCount()));
-//                                seededLabel.setText("seeded vertices: "
-//                                        + String.valueOf(graph.getSeededNodeCount()));
-//                                switchedLabel.setText("switched vertices: "
-//                                        + String.valueOf(graph.getSwitchedNodeCount()));
-
                                 totalLabel.setText("initial vertices: "
                                         + String.valueOf(algorithm.getTotalVertices()));
                                 seededLabel.setText("seeded vertices: "
