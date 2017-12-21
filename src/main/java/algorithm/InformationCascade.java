@@ -86,17 +86,19 @@ public class InformationCascade implements Algorithm {
          * Example to help formalize our model
          * ***********************************
          * For two vertices v and w that are neighbors:
-         *  → if v and w both use the Netbeans IDE, they get reward a
-         *  → if v and w both use the Eclipse IDE, they get reward b
-         *  → if v and w use different IDEs, they get no reward
+         *  → if v and w both decide to work for Apple, they get reward a
+         *  → if v and w both decide to work for Microsoft, they get reward b
+         *  → if v and w use apply at different companies, they get no reward
          *
-         * So, the question becomes: when should a vertex switch IDEs?
-         *  →       p : the fraction of v's neighbors that use Netbeans
-         *  → (1 - p) : the fraction of v's neighbors that use Eclipse
-         *  → v should switch to Netbeans if p > [b / (a + b)]
+         * So, the question becomes: when should a vertex switch the company to apply for?
+         *  →       p : the fraction of v's neighbors that apply at Apple
+         *  → (1 - p) : the fraction of v's neighbors that apply at Microsoft
+         *  → v should switch to Apple if p > [b / (a + b)]
          * */
 
+        // Reinitialize the state of the graph
         resetState();
+        // A short pause to actually visualize the initial state of the graph
         sleep(1000);
 
         // Value that determines whether a vertex should switch
@@ -176,6 +178,8 @@ public class InformationCascade implements Algorithm {
 
     /**
      * Compute the switching probability of a given node
+     * This is equivalent to the fraction of this vertex neighbors
+     * who have switched over the total number of this vertex neighbors
      * @param vertex the node at hand
      * @return the switching probability
      */
@@ -199,7 +203,8 @@ public class InformationCascade implements Algorithm {
     }
 
     /**
-     * Reset to initial state
+     * Reset to initial state.
+     * This method is called before each simulation.
      */
     private void resetState() {
         for (Node node: graph.getNodeSet()) {
@@ -211,9 +216,9 @@ public class InformationCascade implements Algorithm {
     }
 
     /**
-     * In order to gradually visualize the
-     * cascades in the graph, let's introduce a
-     * 100 milliseconds pause.
+     * This utility method is used to help gradually visualize
+     * the way information flows within the graph. For example,
+     * it is used to introduce a short "pause" right after a vertex has switched.
      */
     private void sleep(int time) {
         try {

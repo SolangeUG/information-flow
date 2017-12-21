@@ -22,14 +22,6 @@ class Edge {
     }
 
     /**
-     * Return the endPoint property value
-     * @return endPoint
-     */
-    int getEndPoint() {
-        return this.endPoint;
-    }
-
-    /**
      * Return a hash code value for this connection.
      * This method is supported for the benefit of
      * hash tables such as those provided by
