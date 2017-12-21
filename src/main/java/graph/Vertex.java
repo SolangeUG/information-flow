@@ -14,9 +14,8 @@ import java.util.HashSet;
 class Vertex extends SingleNode {
 
     private int vertexId;
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
     private HashSet<Edge> edges;
-    private HashSet<Integer> neighbors;
-    private boolean switched = false;
 
     /**
      * Create a new graph vertex
@@ -25,58 +24,19 @@ class Vertex extends SingleNode {
      */
     Vertex(AbstractGraph graph, String id) {
         super(graph, id);
-        this.addAttribute("ui.label", id);
 
         this.vertexId = Integer.valueOf(id);
         this.edges = new HashSet<>();
-        this.neighbors = new HashSet<>();
     }
 
     /**
      * Add a connection to this vertex set of edges
      * @param edge the connection to be added
-     * @return true if the edge was successfully added
-     *         false otherwise
      */
-    boolean addEdge(Edge edge) {
-       boolean result = false;
+    void addEdge(Edge edge) {
        if (edge != null) {
-           result = edges.add(edge);
+           edges.add(edge);
        }
-       if (result) {
-           neighbors.add(edge.getEndPoint());
-       }
-       return result;
-    }
-
-    /**
-     * Return the value of the switched property
-     * @return true if switched is true
-     *         false otherwise
-     */
-    boolean hasSwitched() {
-        return this.switched;
-    }
-
-    /**
-     * Update the value of the switched property
-     * @param change the new value
-     */
-    void setSwitched(boolean change) {
-        switched = change;
-        if (switched) {
-            this.setAttribute("ui.class", "switched");
-        } else {
-            this.setAttribute("ui.class", "default");
-        }
-    }
-
-    /**
-     * Return this vertex set of neighbors
-     * @return neighbors
-     */
-    HashSet<Integer> getNeighbors() {
-        return new HashSet<>(neighbors);
     }
 
     /**

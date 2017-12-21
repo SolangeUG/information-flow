@@ -1,6 +1,6 @@
+import algorithm.InformationCascade;
 import graph.Graph;
 import gui.MainView;
-import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -13,7 +13,7 @@ import util.GraphLoader;
  * @author Solange U. Gasengayire
  *
  */
-public class InformationFlowApp extends Application {
+public class Application extends javafx.application.Application {
 
     private Graph graph;
 
@@ -27,14 +27,16 @@ public class InformationFlowApp extends Application {
     @Override
     public void start(Stage primaryStage) {
         ViewPanel graphPanel = initGraph();
-        MainView mainView = new MainView(graph, graphPanel);
+        InformationCascade algorithm = new InformationCascade();
+        algorithm.init(graph);
+        MainView mainView = new MainView(algorithm, graphPanel);
 
         Scene scene = new Scene(mainView);
-        String styleSheet = InformationFlowApp.class
+        String styleSheet = Application.class
                 .getResource("styles/application.css").toExternalForm();
         scene.getStylesheets().add(styleSheet);
 
-        String iconFile = InformationFlowApp.class
+        String iconFile = Application.class
                 .getResource("images/social_network.png").toExternalForm();
         primaryStage.getIcons().add(new Image(iconFile));
         primaryStage.setTitle("Information Cascades");
@@ -56,7 +58,7 @@ public class InformationFlowApp extends Application {
     private ViewPanel initGraph() {
         graph = new Graph("Information Cascades");
 
-        String styleSheet = InformationFlowApp.class.getResource("styles/graph.css").getFile();
+        String styleSheet = Application.class.getResource("styles/graph.css").getFile();
         styleSheet = "url('file://" + styleSheet + "')";
         graph.addAttribute("ui.stylesheet", styleSheet);
         graph.addAttribute("ui.quality");
@@ -70,7 +72,7 @@ public class InformationFlowApp extends Application {
         graphPanel.getCamera().setViewPercent(0.65);
         viewer.enableAutoLayout();
 
-        String graphFile = InformationFlowApp.class
+        String graphFile = Application.class
                 .getResource("data/facebook_1000.txt").getFile().substring(1);
         GraphLoader.loadGraph(graph, graphFile);
 

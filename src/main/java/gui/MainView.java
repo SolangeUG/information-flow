@@ -1,5 +1,6 @@
 package gui;
 
+import algorithm.InformationCascade;
 import graph.Graph;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
@@ -40,16 +41,16 @@ public class MainView extends StackPane {
     private Label seededLabel;
     private Label switchedLabel;
 
+    private InformationCascade algorithm;
     private ViewPanel graphPanel;
-    private Graph graph;
 
     /**
      * Create this view
      */
-    public MainView(Graph graph, ViewPanel graphPanel) {
+    public MainView(InformationCascade algorithm, ViewPanel graphPanel) {
         super();
 
-        this.graph = graph;
+        this.algorithm = algorithm;
         this.graphPanel = graphPanel;
         this.getStyleClass().add("default");
         this.getChildren().add(getRootLayout());
@@ -179,12 +180,19 @@ public class MainView extends StackPane {
                                 bTextField.setDisable(false);
                                 launchButton.setDisable(false);
 
+//                                totalLabel.setText("initial vertices: "
+//                                        + String.valueOf(graph.getVerticesCount()));
+//                                seededLabel.setText("seeded vertices: "
+//                                        + String.valueOf(graph.getSeededNodeCount()));
+//                                switchedLabel.setText("switched vertices: "
+//                                        + String.valueOf(graph.getSwitchedNodeCount()));
+
                                 totalLabel.setText("initial vertices: "
-                                        + String.valueOf(graph.getTotalNodeCount()));
+                                        + String.valueOf(algorithm.getTotalVertices()));
                                 seededLabel.setText("seeded vertices: "
-                                        + String.valueOf(graph.getSeededNodeCount()));
+                                        + String.valueOf(algorithm.getSeededVertices()));
                                 switchedLabel.setText("switched vertices: "
-                                        + String.valueOf(graph.getSwitchedNodeCount()));
+                                        + String.valueOf(algorithm.getSwitchedVertices()));
                                 legend.setVisible(true);
 
                                 progressBar.setVisible(false);
@@ -230,7 +238,10 @@ public class MainView extends StackPane {
         Task<String> simulationTask = new Task<String>() {
             @Override
             protected String call() {
-                graph.runSimulations(aRewardValue, bRewardValue);
+                algorithm.setRewardA(aRewardValue);
+                algorithm.setRewardB(bRewardValue);
+                algorithm.compute();
+                //graph.runSimulations(aRewardValue, bRewardValue);
                 return "simulations";
             }
         };
