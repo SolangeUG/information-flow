@@ -1,7 +1,7 @@
 ### Information Flow Within Social Networks
 
 This project is the Capstone project in the [Object Oriented Java Programming: Data Structures and Beyond Specialization](https://www.coursera.org/specializations/java-object-oriented).
-It investigates cascading behaviros (or information flow) within a social network.
+It investigates cascading behaviors (or information flow) within a social network.
 
 > When people are connected by a network, it becomes possible for them to influence each other's behavior and decisions.
 > There is a nearly limitless set of situations in which people are influenced by others:
