@@ -1,7 +1,8 @@
 # Information Flow Within Social Networks
 
-[![License MIT](https://img.shields.io/badge/license-MIT%20License-green.svg)](https://github.com/SolangeUG/fundamentals/blob/master/LICENSE)
-[![Platform Java](https://img.shields.io/badge/platform-Java-blue.svg)](https://docs.oracle.com/en/java/)
+[![MIT License](https://img.shields.io/badge/license-MIT%20License-green.svg)](https://github.com/SolangeUG/fundamentals/blob/master/LICENSE)
+[![Java Platform](https://img.shields.io/badge/platform-Java-blue.svg)](https://docs.oracle.com/en/java/)
+[![GraphStream Library](https://img.shields.io/badge/library-GraphStream-89A9E3.svg)](http://graphstream-project.org/)
 
 This project is the Capstone project in the [Object Oriented Java Programming: Data Structures and Beyond Specialization](https://www.coursera.org/specializations/java-object-oriented).
 It investigates cascading behaviors (or information flow) within a social network.
@@ -22,21 +23,17 @@ The second part of the project investigates the maximal conditions under which a
 
 ## Languages - Libraries - Tools
 
-
-
-
-## Requirements
-
-
-
+- [Java SE 8](https://docs.oracle.com/javase/8/docs/)
+- [Maven](https://maven.apache.org/what-is-maven.html)
+- [GraphStream](http://graphstream-project.org/)
+- [JUnit 5](http://junit.org/junit5/docs/current/user-guide/)
+- Any IDE that supports JDK 8
 
 ## Resources
 
 - [Networks, Crowds, and Markets: Reasoning about a Highly Connected World](http://www.cs.cornell.edu/home/kleinber/networks-book/)
 - [Capstone: Analyzing (Social) Network Data](https://www.coursera.org/learn/intermediate-programming-capstone/home/info)
 - [Object Oriented Java Programming: Data Structures and Beyond Specialization](https://www.coursera.org/specializations/java-object-oriented)
-
-
 
 ## License
 
