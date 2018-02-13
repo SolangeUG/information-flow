@@ -8,6 +8,10 @@ import org.graphstream.ui.swingViewer.ViewPanel;
 import org.graphstream.ui.view.Viewer;
 import util.GraphLoader;
 
+import java.io.InputStream;
+import java.util.Objects;
+import java.util.Scanner;
+
 /**
  * Main application entry
  * @author Solange U. Gasengayire
@@ -57,10 +61,7 @@ public class Application extends javafx.application.Application {
      */
     private ViewPanel initGraph() {
         graph = new Graph("Information Cascades");
-
-        String styleSheet = Application.class.getResource("styles/graph.css").getFile();
-        styleSheet = "url('file://" + styleSheet + "')";
-        graph.addAttribute("ui.stylesheet", styleSheet);
+        graph.addAttribute("ui.stylesheet", getStyleSheet());
         graph.addAttribute("ui.quality");
         graph.addAttribute("ui.antialias");
 
@@ -72,10 +73,21 @@ public class Application extends javafx.application.Application {
         graphPanel.getCamera().setViewPercent(0.65);
         viewer.enableAutoLayout();
 
-        String graphFile = Application.class
-                .getResource("data/facebook_1000.txt").getFile().substring(1);
-        GraphLoader.loadGraph(graph, graphFile);
+        InputStream graphStream = Objects.requireNonNull(getClass().getClassLoader()
+                        .getResourceAsStream("data/facebook_1000.txt"));
+        GraphLoader.loadGraph(graph, graphStream);
 
         return graphPanel;
+    }
+
+    /**
+     * Return graph styling rules
+     * @return stylesheet
+     */
+    private String getStyleSheet() {
+        InputStream styleStream = Objects.requireNonNull(getClass().getClassLoader()
+                .getResourceAsStream("styles/graph.css"));
+        Scanner scanner = new Scanner(styleStream).useDelimiter("\\A");
+        return scanner.hasNext() ? scanner.next() : "";
     }
 }
