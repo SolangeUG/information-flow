@@ -18,6 +18,7 @@ import javafx.scene.shape.Circle;
 import org.graphstream.ui.swingViewer.ViewPanel;
 
 import javax.swing.*;
+import java.io.InputStream;
 import java.util.Objects;
 
 /**
@@ -128,7 +129,7 @@ public class MainView extends StackPane {
 
         textField.textProperty().addListener(
                 (observable, oldValue, newValue) -> {
-                    if (! newValue.matches("\\d*")) {
+                    if (newValue == null || newValue.isEmpty() || !newValue.matches("\\d*")) {
                         textField.setText(oldValue);
                     } else {
                         if ("a".equals(id)) {
@@ -148,12 +149,11 @@ public class MainView extends StackPane {
      */
     private Button getLaunchButton() {
 
-        String imageFile = Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("images/launch.png")).getPath();
+        InputStream imageStream = Objects.requireNonNull(getClass().getClassLoader()
+                .getResourceAsStream("images/launch.png"));
         Button launch;
-        if (imageFile != null) {
-            imageFile = "file://" + imageFile;
-            Image launchImage = new Image(imageFile);
+        if (imageStream != null) {
+            Image launchImage = new Image(imageStream);
             launch = new Button("Launch", new ImageView(launchImage));
         } else {
             launch = new Button("Launch");
