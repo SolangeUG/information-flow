@@ -3,6 +3,7 @@ package util;
 import graph.Graph;
 
 import java.io.File;
+import java.io.InputStream;
 import java.util.HashSet;
 import java.util.Scanner;
 import java.util.Set;
@@ -29,6 +30,39 @@ public class GraphLoader {
             return;
         }
         // Iterate over the lines in the file, adding new
+        // vertices as they are found and connecting them with edges.
+        while (sc.hasNextInt()) {
+            int v1 = sc.nextInt();
+            int v2 = sc.nextInt();
+            if (!seen.contains(v1)) {
+                graph.addVertex(v1);
+                seen.add(v1);
+            }
+            if (!seen.contains(v2)) {
+                graph.addVertex(v2);
+                seen.add(v2);
+            }
+            graph.addEdge(v1, v2);
+        }
+
+        sc.close();
+    }
+
+    /**
+     * Loads graph with data from an inputStream
+     * @param graph the graph to load
+     * @param stream the data stream
+     */
+    public static void loadGraph(Graph graph, InputStream stream) {
+        Set<Integer> seen = new HashSet<>();
+        Scanner sc;
+        try {
+            sc = new Scanner(stream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        // Iterate over the lines in the stream, adding new
         // vertices as they are found and connecting them with edges.
         while (sc.hasNextInt()) {
             int v1 = sc.nextInt();
