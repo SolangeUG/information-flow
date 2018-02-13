@@ -3,10 +3,12 @@ package algorithm;
 import graph.Graph;
 import org.graphstream.graph.Node;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.GraphLoader;
 
+import java.io.InputStream;
 import java.util.Objects;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -16,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @see InformationCascade class
  * @author Solange U. Gasengayire
  */
+@Disabled
 class InformationCascadeTest {
 
     private InformationCascade algorithm;
@@ -45,9 +48,9 @@ class InformationCascadeTest {
     @DisplayName("Run simulation on a small size graph data")
     void simulationOnSmallGraph() {
 
-        String exampleFile = Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("data/example.txt")).getPath();
-        GraphLoader.loadGraph(exampleGraph, exampleFile);
+        InputStream exampleStream = Objects.requireNonNull(getClass().getClassLoader()
+                .getResourceAsStream("data/example.txt"));
+        GraphLoader.loadGraph(exampleGraph, exampleStream);
 
         runSimulations(exampleGraph);
     }
@@ -56,9 +59,9 @@ class InformationCascadeTest {
     @DisplayName("Run simulation on a medium size graph data")
     void simulationOnMediumGraph() {
 
-        String f1000File = Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("data/facebook_1000.txt")).getPath();
-        GraphLoader.loadGraph(f1000Graph, f1000File);
+        InputStream f1000Stream = Objects.requireNonNull(getClass().getClassLoader()
+                .getResourceAsStream("data/facebook_1000.txt"));
+        GraphLoader.loadGraph(f1000Graph, f1000Stream);
 
         runSimulations(f1000Graph);
     }
@@ -67,9 +70,9 @@ class InformationCascadeTest {
     @DisplayName("Run simulation on a large size graph data")
     void simulationOnLargeGraph() {
 
-        String ucsdFile = Objects.requireNonNull(getClass().getClassLoader()
-                .getResource("data/facebook_ucsd.txt")).getPath();
-        GraphLoader.loadGraph(ucsdGraph, ucsdFile);
+        InputStream ucsdStream = Objects.requireNonNull(getClass().getClassLoader()
+                .getResourceAsStream("data/facebook_ucsd.txt"));
+        GraphLoader.loadGraph(ucsdGraph, ucsdStream);
 
         runSimulations(ucsdGraph);
     }
