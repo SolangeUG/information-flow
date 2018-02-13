@@ -29,6 +29,13 @@ The second part of the project investigates the maximal conditions under which a
 - [JUnit 5](http://junit.org/junit5/docs/current/user-guide/)
 - Any IDE that supports JDK 8
 
+## Run Instructions
+
+- Download and unzip the project source code.
+- From a command line window, navigate to the (newly unzipped) project folder, and then run `mvn clean install` command.
+- To launch the application, run `java -jar target/information-flow-1.0.jar`.
+- You're now ready to freely play around with values `Reward A` and `Reward B`, and visualize how information cascades through the network.
+
 ## Resources
 
 - [Networks, Crowds, and Markets: Reasoning about a Highly Connected World](http://www.cs.cornell.edu/home/kleinber/networks-book/)
