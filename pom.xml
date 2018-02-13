@@ -76,7 +76,7 @@
                     </dependency>
                 </dependencies>
             </plugin>
-            
+
             <!-- Build an executable JAR -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
