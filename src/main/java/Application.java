@@ -73,9 +73,16 @@ public class Application extends javafx.application.Application {
         graphPanel.getCamera().setViewPercent(0.65);
         viewer.enableAutoLayout();
 
-        InputStream graphStream = Objects.requireNonNull(getClass().getClassLoader()
-                        .getResourceAsStream("data/facebook_1000.txt"));
-        GraphLoader.loadGraph(graph, graphStream);
+        // a try-with-resources statement
+        // → we do not have to explicitly handle closing the stream
+        // → it's done for us!
+        try (InputStream graphStream = Objects.requireNonNull(getClass().getClassLoader()
+                                            .getResourceAsStream("data/facebook_1000.txt"))
+            ) {
+            GraphLoader.loadGraph(graph, graphStream);
+        } catch (Exception exception) {
+            // do nothing (for the time being) until we add Logging to our application
+        }
 
         return graphPanel;
     }
@@ -85,9 +92,23 @@ public class Application extends javafx.application.Application {
      * @return stylesheet
      */
     private String getStyleSheet() {
-        InputStream styleStream = Objects.requireNonNull(getClass().getClassLoader()
-                .getResourceAsStream("styles/graph.css"));
-        Scanner scanner = new Scanner(styleStream).useDelimiter("\\A");
-        return scanner.hasNext() ? scanner.next() : "";
+        String styleSheet = "";
+
+        // a try-with-resources statement
+        // → we do not have to explicitly handle closing the stream and scanner
+        // → it's done for us!
+        try (InputStream styleStream = Objects.requireNonNull(getClass().getClassLoader()
+                                        .getResourceAsStream("styles/graph.css"));
+             Scanner scanner = new Scanner(styleStream).useDelimiter("\\A")
+            ){
+
+            if (scanner.hasNext()) {
+                styleSheet = scanner.next();
+            }
+
+        } catch (Exception exception) {
+            // do nothing, we'll use the default stylesheet
+        }
+        return styleSheet;
     }
 }
