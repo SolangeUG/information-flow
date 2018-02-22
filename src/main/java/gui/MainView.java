@@ -149,14 +149,21 @@ public class MainView extends StackPane {
      */
     private Button getLaunchButton() {
 
-        InputStream imageStream = Objects.requireNonNull(getClass().getClassLoader()
-                .getResourceAsStream("images/launch.png"));
-        Button launch;
-        if (imageStream != null) {
-            Image launchImage = new Image(imageStream);
-            launch = new Button("Launch", new ImageView(launchImage));
-        } else {
-            launch = new Button("Launch");
+        Button launch = new Button("Launch");
+
+        // a try-with-resources statement
+        // → we do not have to explicitly handle closing the stream
+        // → it's done for us!
+        try (InputStream imageStream = Objects.requireNonNull(getClass().getClassLoader()
+                                            .getResourceAsStream("images/launch.png"))
+            ) {
+            if (imageStream != null) {
+                Image launchImage = new Image(imageStream);
+                launch.setGraphic(new ImageView(launchImage));
+            }
+
+        } catch (Exception exception) {
+            // do nothing (for the time being) until we add Logging to our application
         }
 
         launch.setOnAction(
