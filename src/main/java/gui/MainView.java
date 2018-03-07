@@ -211,6 +211,8 @@ public class MainView extends StackPane {
         StackPane centerPane = new StackPane();
         centerPane.setMinSize(1080, 600);
 
+        //TODO #2: handle mouse click events!
+
         SwingNode node = new SwingNode();
         SwingUtilities.invokeLater(
                 () -> node.setContent(graphPanel)

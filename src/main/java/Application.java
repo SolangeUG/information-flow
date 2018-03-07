@@ -73,6 +73,9 @@ public class Application extends javafx.application.Application {
         graphPanel.getCamera().setViewPercent(0.65);
         viewer.enableAutoLayout();
 
+        //TODO #1: use a progress indicator, and run the graph initialization in a different thread!
+        //TODO #1: make use of the edX's software design and data structures' Using Threads in Java video!
+
         // a try-with-resources statement
         // → we do not have to explicitly handle closing the stream
         // → it's done for us!
