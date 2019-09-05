@@ -3,7 +3,6 @@ package algorithm;
 import graph.Graph;
 import org.graphstream.graph.Node;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import util.GraphLoader;
@@ -18,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * @see InformationCascade class
  * @author Solange U. Gasengayire
  */
-@Disabled
 class InformationCascadeTest {
 
     private InformationCascade algorithm;
