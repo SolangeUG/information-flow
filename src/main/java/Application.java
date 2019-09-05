@@ -46,7 +46,7 @@ public class Application extends javafx.application.Application {
         primaryStage.setTitle("Information Cascades");
 
         primaryStage.setScene(scene);
-        primaryStage.setMinHeight(980);
+        primaryStage.setMinHeight(720);
         primaryStage.setMinWidth(1080);
         primaryStage.show();
 
